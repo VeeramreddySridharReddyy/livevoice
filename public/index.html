@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>LiveVoice — real-time voice to text</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('lv-theme') || 'dark'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/"><span class="logo"></span> LiveVoice</a>
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">☀️</button>
+    </div>
+
+    <div class="card">
+      <h1>Speak here, read there — live.</h1>
+      <p class="sub">Real-time voice-to-text broadcasting. Start speaking on one device and the words
+        appear instantly on another, anywhere on the internet.</p>
+
+      <div class="choices">
+        <a class="choice" href="/speaker.html">
+          <div class="big">🎙️ Speaker</div>
+          <div class="small">Talk into your mic and share a room code.</div>
+        </a>
+        <a class="choice" href="/receiver.html">
+          <div class="big">📺 Receiver</div>
+          <div class="small">Join a room and watch the live transcript.</div>
+        </a>
+      </div>
+
+      <div class="divider">or join a room by code</div>
+
+      <form id="joinForm" class="row">
+        <input id="codeInput" type="text" inputmode="latin" autocomplete="off"
+               maxlength="6" placeholder="ROOM CODE" aria-label="Room code" />
+        <button class="btn" type="submit">Join as Receiver</button>
+      </form>
+      <p class="hint">Tip: the speaker gets a shareable link like <code>/room/ABCDE</code>.
+        Speakers use their own free <a href="https://console.deepgram.com/" target="_blank" rel="noopener"
+        style="color:var(--accent)">Deepgram API key</a> — receivers need nothing.</p>
+    </div>
+
+    <div class="footer">No account needed · transcripts are live-only and never stored.</div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script>
+    document.getElementById('joinForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var code = document.getElementById('codeInput').value.trim().toUpperCase();
+      if (code) window.location.href = '/room/' + encodeURIComponent(code);
+    });
+  </script>
+</body>
+</html>

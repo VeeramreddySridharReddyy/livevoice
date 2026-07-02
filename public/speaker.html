@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Speaker — LiveVoice</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('lv-theme') || 'dark'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/"><span class="logo"></span> LiveVoice</a>
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">☀️</button>
+    </div>
+
+    <div id="keyCard" class="card hidden" style="margin-bottom:14px">
+      <h1>🔑 Your Deepgram API key</h1>
+      <p class="sub">Transcription runs on <strong>your own</strong> Deepgram account.
+        Get a free key at <a href="https://console.deepgram.com/" target="_blank" rel="noopener"
+        style="color:var(--accent)">console.deepgram.com</a> (API Keys → Create a Key).
+        It's saved only in this browser and used live for your session — never stored on the server.</p>
+      <form id="keyForm" class="row">
+        <input id="keyInput" type="text" autocomplete="off" spellcheck="false"
+               placeholder="Paste your Deepgram API key" aria-label="Deepgram API key"
+               style="text-transform:none;letter-spacing:normal" />
+        <button id="keySaveBtn" class="btn" type="submit">Save &amp; verify</button>
+      </form>
+      <div id="keyToast" class="toast"></div>
+    </div>
+
+    <div class="card">
+      <div class="status-line">
+        <span id="liveDot" class="dot"></span>
+        <span id="connLabel">Connecting…</span>
+        <span class="spacer"></span>
+        <span id="rxLabel" class="label">Receiver: waiting…</span>
+      </div>
+
+      <div id="roombox" class="roombox hidden">
+        <div>
+          <div class="label">Room code</div>
+          <div id="roomCode" class="code">—</div>
+        </div>
+        <div class="row">
+          <button id="copyCode" class="btn secondary" type="button">Copy code</button>
+          <button id="copyLink" class="btn secondary" type="button">Copy link</button>
+        </div>
+      </div>
+
+      <div id="transcript" class="transcript empty">Your words will appear here as you speak.</div>
+
+      <div class="controls">
+        <button id="startBtn" class="btn" type="button">🎙️ Start speaking</button>
+        <button id="stopBtn" class="btn secondary hidden" type="button">⏸ Pause</button>
+        <button id="breakBtn" class="btn secondary" type="button" title="Start a new paragraph">¶ New para</button>
+        <span class="spacer"></span>
+        <button id="clearBtn" class="btn secondary" type="button">Clear</button>
+        <button id="endBtn" class="btn danger" type="button">End session</button>
+      </div>
+
+      <div id="toast" class="toast"></div>
+      <p class="hint">Refreshing this page keeps your room and transcript. Only <strong>End session</strong> resets everything.
+        <a id="changeKey" href="#" style="color:var(--accent)">Change API key</a></p>
+    </div>
+
+    <div class="footer">Audio is transcribed live and relayed instantly — nothing is stored on disk.</div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/transcript-view.js"></script>
+  <script src="/js/speaker.js"></script>
+</body>
+</html>

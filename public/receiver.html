@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Receiver — LiveVoice</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('lv-theme') || 'dark'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/"><span class="logo"></span> LiveVoice</a>
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">☀️</button>
+    </div>
+
+    <!-- Join form (shown when no room in URL) -->
+    <div id="joinCard" class="card hidden">
+      <h1>Join a room</h1>
+      <p class="sub">Enter the room code your speaker shared with you.</p>
+      <form id="joinForm" class="row">
+        <input id="codeInput" type="text" inputmode="latin" autocomplete="off"
+               maxlength="6" placeholder="ROOM CODE" aria-label="Room code" />
+        <button class="btn" type="submit">Join</button>
+      </form>
+      <div id="joinToast" class="toast"></div>
+    </div>
+
+    <!-- Live view -->
+    <div id="liveCard" class="card hidden">
+      <div class="status-line">
+        <span id="liveDot" class="dot"></span>
+        <span id="connLabel">Connecting…</span>
+        <span class="spacer"></span>
+        <span class="label">Room</span>&nbsp;<strong id="roomCode">—</strong>
+      </div>
+
+      <div id="transcript" class="transcript empty">Waiting for the speaker to begin…</div>
+
+      <div class="controls">
+        <span class="label">Text size</span>
+        <button id="fontDown" class="btn secondary" type="button" aria-label="Smaller text">A−</button>
+        <button id="fontUp" class="btn secondary" type="button" aria-label="Larger text">A+</button>
+        <span class="spacer"></span>
+        <button id="clearBtn" class="btn secondary" type="button">Clear</button>
+      </div>
+
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <div class="footer">Transcript is live-only and never stored.</div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/transcript-view.js"></script>
+  <script src="/js/receiver.js"></script>
+</body>
+</html>
