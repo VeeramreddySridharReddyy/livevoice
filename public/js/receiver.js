@@ -33,6 +33,10 @@
   let closingForGood = false;
   let reconnectDelay = 1000;
   let speakerConnected = false;
+  // "Room not found" can be temporary: after a server restart the room only
+  // reappears once the speaker's page reconnects. Retry before giving up.
+  let notFoundRetries = 0;
+  const MAX_NOT_FOUND_RETRIES = 5;
 
   // Paragraph-aware, smart-scrolling transcript renderer.
   const view = window.TranscriptView(transcriptEl, {
@@ -107,6 +111,7 @@
       case 'joined':
         roomCode = msg.roomCode;
         roomCodeEl.textContent = roomCode;
+        notFoundRetries = 0;
         setConn('Connected');
         break;
       case 'history':
@@ -134,9 +139,15 @@
         break;
       case 'error':
         if (msg.code === 'room_not_found') {
-          closingForGood = true;
-          try { ws.close(); } catch (_) {}
-          showJoin('Room "' + (roomCode || '') + '" was not found. Check the code.', 'err');
+          if (notFoundRetries < MAX_NOT_FOUND_RETRIES) {
+            notFoundRetries++;
+            setConn('Looking for the room… (' + notFoundRetries + '/' + MAX_NOT_FOUND_RETRIES + ')');
+            try { ws.close(); } catch (_) {} // onclose schedules the retry with backoff
+          } else {
+            closingForGood = true;
+            try { ws.close(); } catch (_) {}
+            showJoin('Room "' + (roomCode || '') + '" was not found. Check the code, or ask the speaker to reopen their page.', 'err');
+          }
         } else if (msg.code === 'room_full') {
           closingForGood = true;
           try { ws.close(); } catch (_) {}
@@ -170,6 +181,7 @@
     roomCode = code;
     closingForGood = false;
     reconnectDelay = 1000;
+    notFoundRetries = 0;
     // Reflect in URL so refresh/share keeps the session.
     history.replaceState(null, '', '/room/' + encodeURIComponent(code));
     showLive();
